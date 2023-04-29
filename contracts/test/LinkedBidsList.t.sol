@@ -2,7 +2,7 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import {LinkedBidsListLib, LinkedBidsList, Bid} from "src/lib/LinkedBidListLib.sol";
+import {LinkedBidsListLib, LinkedBidsList, Bid} from "src/lib/LinkedBidsListLib.sol";
 
 contract LinkedListTest is Test {
     using LinkedBidsListLib for LinkedBidsList;
