@@ -28,7 +28,8 @@ library LinkedBidsListLib {
             address currentBidder = self.highestBidder;
             Bid storage currentBid = self.bids[currentBidder];
             while (true) {
-                if (unitPrice > self.bids[currentBid.nextBidder].unitPrice) break;
+                if (unitPrice > self.bids[currentBid.nextBidder].unitPrice)
+                    break;
                 currentBidder = currentBid.nextBidder;
                 currentBid = self.bids[currentBidder];
             }
@@ -36,7 +37,11 @@ library LinkedBidsListLib {
                 self.highestBidder = bidder;
                 self.bids[bidder] = Bid(quantity, unitPrice, currentBidder);
             } else {
-                self.bids[bidder] = Bid(quantity, unitPrice, currentBid.nextBidder);
+                self.bids[bidder] = Bid(
+                    quantity,
+                    unitPrice,
+                    currentBid.nextBidder
+                );
                 currentBid.nextBidder = bidder;
             }
         }

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
-import {toDaysWadUnsafe} from 'solmate/utils/SignedWadMath.sol';
+import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
 abstract contract VREA {
     uint256 public immutable reservePrice;

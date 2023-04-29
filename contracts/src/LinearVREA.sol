@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
-import {VREA} from 'src/VREA.sol';
-import {unsafeWadDiv} from 'solmate/utils/SignedWadMath.sol';
+import {VREA} from "src/VREA.sol";
+import {unsafeWadDiv} from "solmate/utils/SignedWadMath.sol";
 
 abstract contract LinearVREA is VREA {
     int256 internal immutable perTimeUnit;

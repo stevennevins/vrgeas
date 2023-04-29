@@ -58,7 +58,11 @@ contract LinkedListTest is Test {
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
         assertEq(list.bids[bidder1].unitPrice, 1);
-        assertEq(list.bids[bidder1].nextBidder, address(0), "nextBidder bidder1");
+        assertEq(
+            list.bids[bidder1].nextBidder,
+            address(0),
+            "nextBidder bidder1"
+        );
         assertEq(list.bids[bidder2].quantity, 1);
         assertEq(list.bids[bidder2].unitPrice, 2);
         assertEq(list.bids[bidder2].nextBidder, bidder1, "nextBidder bidder 2");
