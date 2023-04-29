@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 import {LinkedBidsListLib, LinkedBidsList} from "src/lib/LinkedBidsListLib.sol";
 
-abstract contract VREA {
+abstract contract VRGEA {
     uint256 public immutable reservePrice;
     uint256 public immutable minBidIncrease;
     uint256 public immutable maxSortedBidders = 10_000;
