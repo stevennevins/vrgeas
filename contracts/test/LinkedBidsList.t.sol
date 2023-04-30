@@ -28,13 +28,13 @@ contract LinkedListTest is Test {
 
     function test_RevertsWhenEmpty_Remove() public {
         vm.expectRevert("LinkedBidsList is empty");
-        list.remove(bidder2);
+        list.remove(bidder2, 1);
     }
 
     function test_Remove() public {
         test_WhenEmpty_Insert();
 
-        list.remove(bidder2);
+        list.remove(bidder2, 1);
 
         assertEq(list.highestBidder, address(0), "highestBidder");
     }
@@ -43,7 +43,7 @@ contract LinkedListTest is Test {
         test_WhenEmpty_Insert();
 
         vm.expectRevert("Bid does not exist");
-        list.remove(bidder1);
+        list.remove(bidder1, 1);
 
         assertEq(list.highestBidder, address(0), "highestBidder");
         assertEq(list.bids[bidder2].quantity, 0);
@@ -91,7 +91,7 @@ contract LinkedListTest is Test {
         list.insert(bidder3, 1, 3);
 
         assertEq(list.highestBidder, bidder3, "highestBidder");
-        list.remove(bidder1);
+        list.remove(bidder1, 1);
 
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 0);
@@ -109,7 +109,7 @@ contract LinkedListTest is Test {
         assertEq(list.highestBidder, bidder3, "before highestBidder");
         assertEq(list.bids[bidder3].nextBidder, bidder2, "nextBidder");
 
-        list.remove(bidder3);
+        list.remove(bidder3, 1);
 
         assertEq(list.highestBidder, bidder2, "after highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
@@ -124,7 +124,7 @@ contract LinkedListTest is Test {
         list.insert(bidder1, 1, 1);
         list.insert(bidder2, 1, 2);
         list.insert(bidder3, 1, 3);
-        list.remove(bidder2);
+        list.remove(bidder2, 1);
 
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);

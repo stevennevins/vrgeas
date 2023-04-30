@@ -47,18 +47,31 @@ library LinkedBidsListLib {
         }
     }
 
-    function remove(LinkedBidsList storage self, address bidder) internal {
+    function remove(
+        LinkedBidsList storage self,
+        address bidder,
+        uint256 quantity
+    ) internal {
         require(self.highestBidder != address(0), "LinkedBidsList is empty");
         require(self.bids[bidder].quantity > 0, "Bid does not exist");
-        if (bidder == self.highestBidder) {
-            self.highestBidder = self.bids[self.highestBidder].nextBidder; // update the highestBidder to point to the nextBidder
+        require(self.bids[bidder].quantity >= quantity, "Quantity to high");
+
+        if (self.bids[bidder].quantity > quantity) {
+            self.bids[bidder].quantity -= uint8(quantity);
         } else {
-            address currentBidder = self.highestBidder;
-            while (self.bids[currentBidder].nextBidder != bidder) {
-                currentBidder = self.bids[currentBidder].nextBidder;
+            if (bidder == self.highestBidder) {
+                // update the highestBidder to point to the nextBidder
+                self.highestBidder = self.bids[self.highestBidder].nextBidder;
+            } else {
+                address currentBidder = self.highestBidder;
+                while (self.bids[currentBidder].nextBidder != bidder) {
+                    currentBidder = self.bids[currentBidder].nextBidder;
+                }
+                self.bids[currentBidder].nextBidder = self
+                    .bids[bidder]
+                    .nextBidder;
             }
-            self.bids[currentBidder].nextBidder = self.bids[bidder].nextBidder;
+            delete self.bids[bidder]; // delete the currentBid from the mapping
         }
-        delete self.bids[bidder]; // delete the currentBid from the mapping
     }
 }

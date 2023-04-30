@@ -2,13 +2,9 @@
 pragma solidity ^0.8.17;
 
 import {toWadUnsafe, wadExp, wadLn, unsafeWadMul, unsafeWadDiv, wadMul, toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
-import {LinearVREAInfo as LVREAInfo} from "src/interfaces/ILinearVREA.sol";
+import {VRGEAInfo} from "src/interfaces/IVRGEA.sol";
 
 library LibLinearVRGDA {
-    function toHash(LVREAInfo calldata self) public pure returns (bytes32) {
-        return keccak256(abi.encode(self));
-    }
-
     /// @dev Given a number of tokens sold, return the target time that number of tokens should be sold by.
     /// @param sold A number of tokens sold, scaled by 1e18, to get the corresponding target sale time for.
     /// @param perTimeUnit The number of tokens to target selling in 1 full unit of time, scaled by 1e18.
