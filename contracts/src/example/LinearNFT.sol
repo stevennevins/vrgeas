@@ -8,7 +8,6 @@ import {toDaysWadUnsafe, toWadUnsafe, fromDaysWadUnsafe} from "solmate/utils/Sig
 import {LinkedBidsListLib, LinkedBidsList, Bid} from "src/lib/LinkedBidsListLib.sol";
 
 import {LinearVRGEA} from "src/LinearVRGEA.sol";
-import "forge-std/Test.sol";
 
 contract LinearNFT is ERC721, LinearVRGEA {
     /// TODO Implement check minBidIncrease

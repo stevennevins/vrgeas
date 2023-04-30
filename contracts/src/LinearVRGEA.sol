@@ -3,7 +3,6 @@ pragma solidity ^0.8.17;
 
 import {VRGEA} from "src/VRGEA.sol";
 import {unsafeWadDiv} from "solmate/utils/SignedWadMath.sol";
-import {VRGEAInfo} from "src/interfaces/IVRGEA.sol";
 
 abstract contract LinearVRGEA is VRGEA {
     int256 public immutable perTimeUnit;
