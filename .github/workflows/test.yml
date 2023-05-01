@@ -28,5 +28,5 @@ jobs:
 
       - name: Run Forge tests
         run: |
-          cd contracts && forge test -vvv
+          forge test -vvv
         id: test
