@@ -23,8 +23,7 @@ contract LinearNFT is ERC721, LinearVRGEA {
         require(amount > 0, "Amount 0");
         uint256 unitPrice = msg.value / amount;
         require(unitPrice >= reservePrice, "Bid too low");
-        uint256 fillableQuantity = _getFillableQuantity(startTime);
-        if (fillableQuantity > 0) _processFillableBids(fillableQuantity);
+        _processFillableBids();
         Bid memory bidInfo = bidQueue.bids[bidQueue.highestBidder];
         if (
             unitPrice > bidInfo.unitPrice &&
@@ -34,15 +33,16 @@ contract LinearNFT is ERC721, LinearVRGEA {
     }
 
     function removeBid() external {
-        uint256 fillableQuantity = _getFillableQuantity(startTime);
-        if (fillableQuantity > 0) _processFillableBids(fillableQuantity);
+        _processFillableBids();
         Bid memory bidInfo = bidQueue.bids[msg.sender];
         uint256 refund = bidInfo.quantity * bidInfo.unitPrice;
         bidQueue.remove(msg.sender, bidInfo.quantity);
         msg.sender.safeTransferETH(refund);
     }
 
-    function _processFillableBids(uint256 quantity) internal {
+    function _processFillableBids() internal {
+        uint256 quantity = _getFillableQuantity(startTime);
+        if (quantity == 0) return;
         Bid memory bidInfo = bidQueue.bids[bidQueue.highestBidder];
         totalSold += quantity;
 
