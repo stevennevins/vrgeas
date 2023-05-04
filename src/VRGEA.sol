@@ -32,27 +32,27 @@ abstract contract VRGEA {
         return _getFillableQuantity(startTime);
     }
 
-    function _insertBid(uint88 unitPrice, uint8 quantity) internal {
+    function _insertBid(
+        address bidder,
+        uint88 unitPrice,
+        uint8 quantity
+    ) internal {
         require(unitPrice >= reservePrice, "Bid too low");
         _processFillableBids();
         Bid memory bidInfo = bidQueue.bids[bidQueue.highestBidder];
-        if (
-            unitPrice > bidInfo.unitPrice &&
-            _checkMinBidIncrease(unitPrice, bidInfo.unitPrice)
-        ) revert("Invalid Increase");
-        bidQueue.insert(msg.sender, quantity, unitPrice);
+        if (!_isValidBid(unitPrice, bidInfo.unitPrice)) revert("Invalid Bid");
+        bidQueue.insert(bidder, quantity, unitPrice);
     }
 
     function _removeBid(address bidder) internal returns (uint256 bidAmount) {
         _processFillableBids();
         Bid memory bidInfo = bidQueue.bids[bidder];
         bidAmount = bidInfo.quantity * bidInfo.unitPrice;
-        bidQueue.remove(msg.sender, bidInfo.quantity);
+        bidQueue.remove(bidder, bidInfo.quantity);
     }
 
     function _processFillableBids() internal {
         uint256 quantity = _getFillableQuantity(startTime);
-        if (quantity == 0) return;
         Bid memory bidInfo = bidQueue.bids[bidQueue.highestBidder];
         totalSold += quantity;
 
@@ -79,10 +79,15 @@ abstract contract VRGEA {
         }
     }
 
-    function _checkMinBidIncrease(
+    function _isValidBid(
         uint256 insertBidPrice,
         uint256 highestBidPrice
-    ) internal returns (bool) {}
+    ) internal view returns (bool) {
+        return
+            insertBidPrice < highestBidPrice ||
+            (insertBidPrice * (minBidIncrease + 10_000)) / 10_000 >
+            highestBidPrice;
+    }
 
     function _getFillableQuantity(
         uint256 _startTime
