@@ -89,8 +89,8 @@ abstract contract VRGEA {
     ) internal view returns (bool) {
         return
             insertBidPrice < highestBidPrice ||
-            (insertBidPrice * (minBidIncrease + 10_000)) / 10_000 >
-            highestBidPrice;
+            (highestBidPrice * (minBidIncrease + 10_000)) / 10_000 <
+            insertBidPrice;
     }
 
     function _getFillableQuantity(
