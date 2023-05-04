@@ -16,13 +16,14 @@ contract LinearNFT is ERC721, LinearVRGEA {
         LinearVRGEA(block.timestamp, 1e18, 500, 1e18)
     {}
 
-    function bid(uint8 amount) external payable {
+    function bid(uint8 amount, uint256 price) external payable override {
         require(amount > 0, "Amount 0");
+        require(amount * price == msg.value, "Invalid value");
         uint256 unitPrice = msg.value / amount;
         _insertBid(msg.sender, unitPrice.safeCastTo88(), amount);
     }
 
-    function removeBid() external {
+    function withdraw() external override {
         uint256 refund = _removeBid(msg.sender);
         msg.sender.safeTransferETH(refund);
     }

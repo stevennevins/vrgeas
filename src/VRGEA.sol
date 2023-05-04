@@ -24,6 +24,10 @@ abstract contract VRGEA {
         startTime = _startTime;
     }
 
+    function bid(uint8 quantity, uint256 value) external payable virtual;
+
+    function withdraw() external virtual;
+
     function getTargetSaleTime(
         int256 sold
     ) public view virtual returns (int256);

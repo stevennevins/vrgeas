@@ -25,7 +25,7 @@ contract LinearVRGEATest is Test {
     function test_Bid() public {
         uint256 reservePrice = vrgea.reservePrice();
         vm.prank(bidder1);
-        vrgea.bid{value: reservePrice}(1);
+        vrgea.bid{value: reservePrice}(1, reservePrice);
         assertEq(bidder1.balance, 99 ether);
         assertEq(address(vrgea).balance, 1 ether);
     }
@@ -34,7 +34,7 @@ contract LinearVRGEATest is Test {
         vm.warp(block.timestamp + 1 days);
         uint256 reservePrice = vrgea.reservePrice();
         vm.prank(bidder1);
-        vrgea.bid{value: reservePrice}(1);
+        vrgea.bid{value: reservePrice}(1, reservePrice);
         assertEq(bidder1.balance, 99 ether);
         assertEq(address(vrgea).balance, 1 ether);
     }
@@ -43,24 +43,24 @@ contract LinearVRGEATest is Test {
         uint256 reservePrice = vrgea.reservePrice();
         vm.expectRevert("Bid too low");
         vm.prank(bidder1);
-        vrgea.bid{value: reservePrice - 1}(1);
+        vrgea.bid{value: reservePrice - 1}(1, reservePrice - 1);
     }
 
     function test_RevertsWhenQuantity0_Bid() public {
         uint256 reservePrice = vrgea.reservePrice();
         vm.expectRevert("Amount 0");
         vm.prank(bidder1);
-        vrgea.bid{value: reservePrice}(0);
+        vrgea.bid{value: reservePrice}(0, reservePrice);
     }
 
     function test_RemoveBid() public {
         uint256 reservePrice = vrgea.reservePrice();
         vm.prank(bidder1);
-        vrgea.bid{value: reservePrice}(1);
+        vrgea.bid{value: reservePrice}(1, reservePrice);
         assertEq(bidder1.balance, 99 ether);
 
         vm.prank(bidder1);
-        vrgea.removeBid();
+        vrgea.withdraw();
 
         assertEq(bidder1.balance, 100 ether);
     }
@@ -78,12 +78,12 @@ contract LinearVRGEATest is Test {
     function test_WhenFillable_GetFillableQuantity() public {
         uint256 reservePrice = vrgea.reservePrice();
         assertEq(uint256(vrgea.getFillableQuantity()), 0);
-        vrgea.bid{value: reservePrice}(1);
+        vrgea.bid{value: reservePrice}(1, reservePrice);
 
         vm.warp(block.timestamp + 1 days);
         vm.prank(bidder1);
         assertEq(uint256(vrgea.getFillableQuantity()), 1, "before bid");
-        vrgea.bid{value: reservePrice}(1);
+        vrgea.bid{value: reservePrice}(1, reservePrice);
         assertEq(uint256(vrgea.getFillableQuantity()), 0, "after bid");
         assertEq(uint256(vrgea.totalSold()), 1, "sold");
     }
@@ -95,7 +95,7 @@ contract LinearVRGEATest is Test {
         vm.warp(block.timestamp + 1 days);
         vm.prank(bidder1);
         assertEq(uint256(vrgea.getFillableQuantity()), 1, "before bid");
-        vrgea.bid{value: reservePrice}(1);
+        vrgea.bid{value: reservePrice}(1, reservePrice);
         assertEq(uint256(vrgea.getFillableQuantity()), 0, "after bid");
         assertEq(uint256(vrgea.totalSold()), 0, "sold");
     }
