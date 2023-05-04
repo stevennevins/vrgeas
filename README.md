@@ -1,2 +1,2 @@
-# VREAs
+# VRGEAs
 ETHBoston Hackathon Project
