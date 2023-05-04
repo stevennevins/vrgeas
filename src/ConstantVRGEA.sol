@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 import {VRGEA} from "src/VRGEA.sol";
 import {unsafeWadDiv} from "solmate/utils/SignedWadMath.sol";
 
-abstract contract LinearVRGEA is VRGEA {
+abstract contract ConstantVRGEA is VRGEA {
     int256 public immutable targetTime;
 
     /// @dev _targetTime must be in dayWads
