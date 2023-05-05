@@ -136,8 +136,10 @@ contract LinkedListTest is Test {
         assertEq(list.bids[bidder1].unitPrice, 0);
         assertEq(list.bids[bidder2].quantity, 1);
         assertEq(list.bids[bidder2].unitPrice, 2 ether);
+        assertEq(list.bids[bidder2].nextBidder, address(0));
         assertEq(list.bids[bidder3].quantity, 1);
         assertEq(list.bids[bidder3].unitPrice, 3 ether);
+        assertEq(list.bids[bidder3].nextBidder, bidder2);
     }
 
     function test_WhenRemovehighestBidder_Remove() public {
@@ -152,8 +154,10 @@ contract LinkedListTest is Test {
         assertEq(list.highestBidder, bidder2, "after highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
         assertEq(list.bids[bidder1].unitPrice, 1 ether);
+        assertEq(list.bids[bidder1].nextBidder, address(0));
         assertEq(list.bids[bidder2].quantity, 1);
         assertEq(list.bids[bidder2].unitPrice, 2 ether);
+        assertEq(list.bids[bidder2].nextBidder, bidder1);
         assertEq(list.bids[bidder3].quantity, 0);
         assertEq(list.bids[bidder3].unitPrice, 0);
     }
@@ -167,9 +171,11 @@ contract LinkedListTest is Test {
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
         assertEq(list.bids[bidder1].unitPrice, 1 ether);
+        assertEq(list.bids[bidder1].nextBidder, address(0));
         assertEq(list.bids[bidder2].quantity, 0);
         assertEq(list.bids[bidder2].unitPrice, 0);
         assertEq(list.bids[bidder3].quantity, 1);
         assertEq(list.bids[bidder3].unitPrice, 3 ether);
+        assertEq(list.bids[bidder3].nextBidder, bidder1);
     }
 }
