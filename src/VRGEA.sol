@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.18;
 
 import {toDaysWadUnsafe, toWadUnsafe, fromDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 import {LinkedBidsListLib, LinkedBidsList, Bid} from "src/lib/LinkedBidsListLib.sol";
@@ -7,7 +7,6 @@ import {LinkedBidsListLib, LinkedBidsList, Bid} from "src/lib/LinkedBidsListLib.
 abstract contract VRGEA {
     using LinkedBidsListLib for LinkedBidsList;
     uint256 public immutable reservePrice;
-    uint256 public immutable minBidIncrease;
     uint256 public immutable startTime;
 
     LinkedBidsList public bidQueue;
@@ -19,8 +18,8 @@ abstract contract VRGEA {
         uint256 _minBidIncrease,
         uint256 _reservePrice
     ) {
+        bidQueue.minBidIncrease = _minBidIncrease;
         reservePrice = _reservePrice;
-        minBidIncrease = _minBidIncrease;
         startTime = _startTime;
     }
 
@@ -43,8 +42,6 @@ abstract contract VRGEA {
     ) internal {
         require(unitPrice >= reservePrice, "Bid too low");
         _processFillableBids();
-        Bid memory bidInfo = bidQueue.bids[bidQueue.highestBidder];
-        if (!_isValidBid(unitPrice, bidInfo.unitPrice)) revert("Invalid Bid");
         bidQueue.insert(bidder, quantity, unitPrice);
     }
 
@@ -81,16 +78,6 @@ abstract contract VRGEA {
                 bidInfo = bidQueue.bids[bidQueue.highestBidder];
             }
         }
-    }
-
-    function _isValidBid(
-        uint256 insertBidPrice,
-        uint256 highestBidPrice
-    ) internal view returns (bool) {
-        return
-            insertBidPrice < highestBidPrice ||
-            (highestBidPrice * (minBidIncrease + 10_000)) / 10_000 <
-            insertBidPrice;
     }
 
     function _getFillableQuantity(

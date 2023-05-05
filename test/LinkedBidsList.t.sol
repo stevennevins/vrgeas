@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.18;
 
 import "forge-std/Test.sol";
 import {LinkedBidsListLib, LinkedBidsList, Bid} from "src/lib/LinkedBidsListLib.sol";
@@ -14,16 +14,54 @@ contract LinkedListTest is Test {
     address public bidder3 = address(3);
     address public bidder4 = address(4);
 
-    function setUp() public {}
+    function setUp() public {
+        list.minBidIncrease = 500;
+    }
+
+    function test_minBidIncrease() public {
+        assertEq(500, list.minBidIncrease);
+    }
+
+    function test_HighestBidder() public {
+        list.highestBidder = bidder1;
+        assertEq(list.highestBidder, bidder1);
+    }
 
     function test_WhenEmpty_Insert() public {
         uint8 quantity = 1;
-        uint88 unitPrice = 1;
+        uint88 unitPrice = 1 ether;
         list.insert(bidder2, quantity, unitPrice);
 
         assertEq(list.highestBidder, bidder2, "highestBidder");
         assertEq(list.bids[bidder2].quantity, 1);
-        assertEq(list.bids[bidder2].unitPrice, 1);
+        assertEq(list.bids[bidder2].unitPrice, 1 ether);
+    }
+
+    function test_WhenSame_Insert() public {
+        uint8 quantity = 1;
+        uint88 unitPrice = 1 ether;
+        list.insert(bidder1, quantity, unitPrice);
+        unitPrice = 0.8 ether;
+        list.insert(bidder2, quantity, unitPrice);
+        unitPrice = 0.8 ether;
+        list.insert(bidder3, quantity, unitPrice);
+    }
+
+    function test_WhenValidIncrease_Insert() public {
+        uint8 quantity = 1;
+        uint88 unitPrice = 1 ether;
+        list.insert(bidder1, quantity, unitPrice);
+        unitPrice = 1.05 ether;
+        list.insert(bidder2, quantity, unitPrice);
+    }
+
+    function test_RevertsWhenInvalidIncrease_Insert() public {
+        uint8 quantity = 1;
+        uint88 unitPrice = 1 ether;
+        list.insert(bidder1, quantity, unitPrice);
+        unitPrice = 1.05 ether - 1;
+        vm.expectRevert();
+        list.insert(bidder2, quantity, unitPrice);
     }
 
     function test_RevertsWhenEmpty_Remove() public {
@@ -51,44 +89,44 @@ contract LinkedListTest is Test {
     }
 
     function test_WhenInOrderMany_Insert() public {
-        list.insert(bidder1, 1, 1);
-        list.insert(bidder2, 1, 2);
-        list.insert(bidder3, 1, 3);
+        list.insert(bidder1, 1, 1 ether);
+        list.insert(bidder2, 1, 2 ether);
+        list.insert(bidder3, 1, 3 ether);
 
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
-        assertEq(list.bids[bidder1].unitPrice, 1);
+        assertEq(list.bids[bidder1].unitPrice, 1 ether);
         assertEq(
             list.bids[bidder1].nextBidder,
             address(0),
             "nextBidder bidder1"
         );
         assertEq(list.bids[bidder2].quantity, 1);
-        assertEq(list.bids[bidder2].unitPrice, 2);
+        assertEq(list.bids[bidder2].unitPrice, 2 ether);
         assertEq(list.bids[bidder2].nextBidder, bidder1, "nextBidder bidder 2");
         assertEq(list.bids[bidder3].quantity, 1);
-        assertEq(list.bids[bidder3].unitPrice, 3);
+        assertEq(list.bids[bidder3].unitPrice, 3 ether);
         assertEq(list.bids[bidder3].nextBidder, bidder2, "nextBidder bidder 3");
     }
 
     function test_WhenOutOfOrderMany_Insert() public {
-        list.insert(bidder2, 1, 2);
-        list.insert(bidder1, 1, 1);
-        list.insert(bidder3, 1, 3);
+        list.insert(bidder2, 1, 2 ether);
+        list.insert(bidder1, 1, 1 ether);
+        list.insert(bidder3, 1, 3 ether);
 
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
-        assertEq(list.bids[bidder1].unitPrice, 1);
+        assertEq(list.bids[bidder1].unitPrice, 1 ether);
         assertEq(list.bids[bidder2].quantity, 1);
-        assertEq(list.bids[bidder2].unitPrice, 2);
+        assertEq(list.bids[bidder2].unitPrice, 2 ether);
         assertEq(list.bids[bidder3].quantity, 1);
-        assertEq(list.bids[bidder3].unitPrice, 3);
+        assertEq(list.bids[bidder3].unitPrice, 3 ether);
     }
 
     function test_WhenRemoveTail_Remove() public {
-        list.insert(bidder1, 1, 1);
-        list.insert(bidder2, 1, 2);
-        list.insert(bidder3, 1, 3);
+        list.insert(bidder1, 1, 1 ether);
+        list.insert(bidder2, 1, 2 ether);
+        list.insert(bidder3, 1, 3 ether);
 
         assertEq(list.highestBidder, bidder3, "highestBidder");
         list.remove(bidder1, 1);
@@ -97,15 +135,15 @@ contract LinkedListTest is Test {
         assertEq(list.bids[bidder1].quantity, 0);
         assertEq(list.bids[bidder1].unitPrice, 0);
         assertEq(list.bids[bidder2].quantity, 1);
-        assertEq(list.bids[bidder2].unitPrice, 2);
+        assertEq(list.bids[bidder2].unitPrice, 2 ether);
         assertEq(list.bids[bidder3].quantity, 1);
-        assertEq(list.bids[bidder3].unitPrice, 3);
+        assertEq(list.bids[bidder3].unitPrice, 3 ether);
     }
 
     function test_WhenRemovehighestBidder_Remove() public {
-        list.insert(bidder1, 1, 1);
-        list.insert(bidder2, 1, 2);
-        list.insert(bidder3, 1, 3);
+        list.insert(bidder1, 1, 1 ether);
+        list.insert(bidder2, 1, 2 ether);
+        list.insert(bidder3, 1, 3 ether);
         assertEq(list.highestBidder, bidder3, "before highestBidder");
         assertEq(list.bids[bidder3].nextBidder, bidder2, "nextBidder");
 
@@ -113,25 +151,25 @@ contract LinkedListTest is Test {
 
         assertEq(list.highestBidder, bidder2, "after highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
-        assertEq(list.bids[bidder1].unitPrice, 1);
+        assertEq(list.bids[bidder1].unitPrice, 1 ether);
         assertEq(list.bids[bidder2].quantity, 1);
-        assertEq(list.bids[bidder2].unitPrice, 2);
+        assertEq(list.bids[bidder2].unitPrice, 2 ether);
         assertEq(list.bids[bidder3].quantity, 0);
         assertEq(list.bids[bidder3].unitPrice, 0);
     }
 
     function test_WhenRemoveInner_Remove() public {
-        list.insert(bidder1, 1, 1);
-        list.insert(bidder2, 1, 2);
-        list.insert(bidder3, 1, 3);
+        list.insert(bidder1, 1, 1 ether);
+        list.insert(bidder2, 1, 2 ether);
+        list.insert(bidder3, 1, 3 ether);
         list.remove(bidder2, 1);
 
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
-        assertEq(list.bids[bidder1].unitPrice, 1);
+        assertEq(list.bids[bidder1].unitPrice, 1 ether);
         assertEq(list.bids[bidder2].quantity, 0);
         assertEq(list.bids[bidder2].unitPrice, 0);
         assertEq(list.bids[bidder3].quantity, 1);
-        assertEq(list.bids[bidder3].unitPrice, 3);
+        assertEq(list.bids[bidder3].unitPrice, 3 ether);
     }
 }

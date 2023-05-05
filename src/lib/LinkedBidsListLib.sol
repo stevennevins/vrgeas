@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.18;
 
 struct Bid {
     uint8 quantity;
@@ -8,9 +8,9 @@ struct Bid {
 }
 
 struct LinkedBidsList {
-    /// key unitPrice mapping of bidder addresses to their corresponding bids
-    mapping(address => Bid) bids;
+    mapping(address bidder => Bid bidInfo) bids;
     address highestBidder;
+    uint256 minBidIncrease;
 }
 
 library LinkedBidsListLib {
@@ -20,31 +20,23 @@ library LinkedBidsListLib {
         uint8 quantity,
         uint88 unitPrice
     ) internal {
-        if (self.highestBidder == address(0)) {
-            /// if empty
-            self.bids[bidder] = Bid(quantity, unitPrice, address(0));
-            self.highestBidder = bidder;
-        } else {
-            address currentBidder = self.highestBidder;
-            Bid storage currentBid = self.bids[currentBidder];
-            while (true) {
-                if (unitPrice > self.bids[currentBid.nextBidder].unitPrice)
-                    break;
-                currentBidder = currentBid.nextBidder;
-                currentBid = self.bids[currentBidder];
-            }
-            if (currentBidder == self.highestBidder) {
-                self.highestBidder = bidder;
-                self.bids[bidder] = Bid(quantity, unitPrice, currentBidder);
-            } else {
-                self.bids[bidder] = Bid(
-                    quantity,
-                    unitPrice,
-                    currentBid.nextBidder
-                );
-                currentBid.nextBidder = bidder;
-            }
+        require(quantity > 0, "Quantity > 0");
+        require(unitPrice > 0, "Price > 0");
+        address leftBidder;
+        address rightBidder = self.highestBidder;
+        Bid storage rightNode = self.bids[rightBidder];
+        while (rightNode.unitPrice >= unitPrice) {
+            (leftBidder, rightBidder) = (rightBidder, rightNode.nextBidder);
+            rightNode = self.bids[rightBidder];
         }
+
+        require(
+            unitPrice >= calculateMinIncrease(self, rightNode.unitPrice),
+            "Invalid Bid"
+        );
+        if (self.highestBidder == rightBidder) self.highestBidder = bidder;
+        self.bids[bidder] = Bid(quantity, unitPrice, rightBidder);
+        self.bids[leftBidder].nextBidder = bidder;
     }
 
     function remove(
@@ -73,5 +65,12 @@ library LinkedBidsListLib {
             }
             delete self.bids[bidder]; // delete the currentBid from the mapping
         }
+    }
+
+    function calculateMinIncrease(
+        LinkedBidsList storage self,
+        uint256 rightBidPrice
+    ) internal view returns (uint256) {
+        return (rightBidPrice * (self.minBidIncrease + 10_000)) / 10_000;
     }
 }
