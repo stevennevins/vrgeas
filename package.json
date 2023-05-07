@@ -3,6 +3,13 @@
   "license": "MIT",
   "version": "0.1.0",
   "description": "",
+  "files": [
+    "/src/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stevennevins/LazyVRGEAs"
+  },
   "scripts": {
     "prettier": "prettier --write 'src/**/*.sol' 'test/*.sol'",
     "prettier:list": "prettier --list-different 'src/**/*.sol'",
