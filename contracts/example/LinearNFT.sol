@@ -5,7 +5,7 @@ import {ERC721} from "solmate/tokens/ERC721.sol";
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {SafeCastLib} from "solmate/utils/SafeCastLib.sol";
 
-import {LinearVRGEA} from "src/LinearVRGEA.sol";
+import {LinearVRGEA} from "contracts/LinearVRGEA.sol";
 
 contract LinearNFT is ERC721, LinearVRGEA {
     using SafeCastLib for uint256;

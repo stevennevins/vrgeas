@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.18;
 
-import {VRGEA} from "src/VRGEA.sol";
+import {VRGEA} from "contracts/VRGEA.sol";
 import {unsafeWadDiv} from "solmate/utils/SignedWadMath.sol";
 
 abstract contract LinearVRGEA is VRGEA {

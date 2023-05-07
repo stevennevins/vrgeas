@@ -2,7 +2,7 @@
 pragma solidity ^0.8.18;
 
 import {toDaysWadUnsafe, toWadUnsafe, fromDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
-import {LinkedBidsListLib, LinkedBidsList, Bid} from "src/lib/LinkedBidsListLib.sol";
+import {LinkedBidsListLib, LinkedBidsList, Bid} from "contracts/lib/LinkedBidsListLib.sol";
 
 abstract contract VRGEA {
     using LinkedBidsListLib for LinkedBidsList;

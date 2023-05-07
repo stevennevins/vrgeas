@@ -4,11 +4,11 @@
   "version": "0.1.0",
   "description": "",
   "files": [
-    "src/**/*.sol"
+    "contracts"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stevennevins/vrgeas.git"
+    "url": "https://github.com/stevennevins/vrgeas"
   },
   "scripts": {
     "prettier": "prettier --write 'src/**/*.sol' 'test/*.sol'",
