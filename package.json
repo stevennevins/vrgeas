@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "keywords": [],
   "private": true,
+  "files": [
+    "src/**/*.sol"
+  ],
   "scripts": {
     "prettier": "prettier --write 'src/**/*.sol' 'test/*.sol'",
     "prettier:list": "prettier --list-different 'src/**/*.sol'",
