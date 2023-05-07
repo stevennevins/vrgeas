@@ -8,7 +8,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stevennevins/LazyVRGEAs.git"
+    "url": "https://github.com/stevennevins/LazyVRGEAs.git"
   },
   "scripts": {
     "prettier": "prettier --write 'src/**/*.sol' 'test/*.sol'",
