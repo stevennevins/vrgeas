@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.18;
 
-import "forge-std/Test.sol";
-import {LinkedBidsListLib, LinkedBidsList, Bid} from "contracts/lib/LinkedBidsListLib.sol";
+import {Test} from "forge-std/Test.sol";
+import {LinkedBidsListLib, LinkedBidsList} from "src/lib/LinkedBidsListLib.sol";
 
 contract LinkedListTest is Test {
     using LinkedBidsListLib for LinkedBidsList;
@@ -96,11 +96,7 @@ contract LinkedListTest is Test {
         assertEq(list.highestBidder, bidder3, "highestBidder");
         assertEq(list.bids[bidder1].quantity, 1);
         assertEq(list.bids[bidder1].unitPrice, 1 ether);
-        assertEq(
-            list.bids[bidder1].nextBidder,
-            address(0),
-            "nextBidder bidder1"
-        );
+        assertEq(list.bids[bidder1].nextBidder, address(0), "nextBidder bidder1");
         assertEq(list.bids[bidder2].quantity, 1);
         assertEq(list.bids[bidder2].unitPrice, 2 ether);
         assertEq(list.bids[bidder2].nextBidder, bidder1, "nextBidder bidder 2");

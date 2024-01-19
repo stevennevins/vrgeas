@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.18;
 
-import {VRGEA} from "contracts/VRGEA.sol";
+import {VRGEA} from "src/VRGEA.sol";
 import {unsafeWadDiv} from "solmate/utils/SignedWadMath.sol";
 
 abstract contract LinearVRGEA is VRGEA {
@@ -16,9 +16,7 @@ abstract contract LinearVRGEA is VRGEA {
         perTimeUnit = _perTimeUnit;
     }
 
-    function getTargetSaleTime(
-        int256 sold
-    ) public view virtual override returns (int256) {
+    function getTargetSaleTime(int256 sold) public view virtual override returns (int256) {
         return unsafeWadDiv(sold, perTimeUnit);
     }
 }

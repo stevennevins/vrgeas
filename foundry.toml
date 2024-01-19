@@ -1,12 +1,12 @@
 [profile.default]
-src = "src"
+src = "contracts"
 out = "out"
 libs = ["lib"]
 remappings = [
-    "ds-test/=lib/forge-std/lib/ds-test/src/",
-    "forge-std/=lib/forge-std/src/",
-    "openzeppelin-contracts/=lib/openzeppelin-contracts/",
-    "solmate/=lib/solmate/src/",
+  "ds-test/=lib/forge-std/lib/ds-test/src/",
+  "forge-std/=lib/forge-std/src/",
+  "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+  "solmate/=lib/solmate/src/",
 ]
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

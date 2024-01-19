@@ -36,18 +36,9 @@ abstract contract LogisiticVRGEA is VRGEA {
         timeScale = _timeScale;
     }
 
-    function getTargetSaleTime(
-        int256 sold
-    ) public view virtual override returns (int256) {
+    function getTargetSaleTime(int256 sold) public view virtual override returns (int256) {
         unchecked {
-            return
-                -unsafeWadDiv(
-                    wadLn(
-                        unsafeDiv(logisticLimitDoubled, sold + logisticLimit) -
-                            1e18
-                    ),
-                    timeScale
-                );
+            return -unsafeWadDiv(wadLn(unsafeDiv(logisticLimitDoubled, sold + logisticLimit) - 1e18), timeScale);
         }
     }
 }

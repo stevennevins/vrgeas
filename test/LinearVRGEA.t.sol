@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.18;
 
-import "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 import {toDaysWadUnsafe, toWadUnsafe} from "solmate/utils/SignedWadMath.sol";
-import {LinearNFT} from "contracts/example/LinearNFT.sol";
+import {LinearNFT} from "src/example/LinearNFT.sol";
 
 contract LinearVRGEATest is Test {
     uint256 public WAD = 10 ** 18;

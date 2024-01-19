@@ -5,16 +5,13 @@ import {ERC721} from "solmate/tokens/ERC721.sol";
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {SafeCastLib} from "solmate/utils/SafeCastLib.sol";
 
-import {LinearVRGEA} from "contracts/LinearVRGEA.sol";
+import {LinearVRGEA} from "src/LinearVRGEA.sol";
 
 contract LinearNFT is ERC721, LinearVRGEA {
     using SafeCastLib for uint256;
     using SafeTransferLib for address;
 
-    constructor()
-        ERC721("NFT", "LINEAR")
-        LinearVRGEA(block.timestamp, 1e18, 500, 1e18)
-    {}
+    constructor() ERC721("NFT", "LINEAR") LinearVRGEA(block.timestamp, 1e18, 500, 1e18) {}
 
     function bid(uint8 amount, uint256 price) external payable override {
         require(amount > 0, "Amount 0");
