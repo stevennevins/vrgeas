@@ -1,7 +1,5 @@
 # VRGEAs
 
-The auction's rate of sale is determined by a target sale time function, which is abstract in the base contract and must be implemented in derived contracts. The repository includes several implementations of this function, each providing a different dynamic for the auction:
-
 VRGEA.sol
 : This is the base contract for a Variable Rate Gradual English Auction (VRGEA). It provides the basic functionality for an auction, including the ability to place and withdraw bids. The auction's rate of sale is determined by a target sale time function, which is abstract in this base contract and must be implemented in derived contracts.
 
