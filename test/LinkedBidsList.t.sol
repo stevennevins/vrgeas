@@ -174,4 +174,10 @@ contract LinkedListTest is Test {
         assertEq(list.bids[bidder3].unitPrice, 3 ether);
         assertEq(list.bids[bidder3].nextBidder, bidder1);
     }
+
+    function test_WhenSameBidder_Insert() public {}
+
+    function test_WhenRightBidderAddress0_Insert() public {}
+
+    function test_RevertsWhen_MinBidIncreaseGreaterThan10000() public {}
 }
